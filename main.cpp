@@ -5,23 +5,28 @@ using namespace cv;
 using namespace std;
 int main()
 {
-	Mat image = imread("britney.jpg");
+	Mat image = imread("../Files/britney.jpg");
+	if(image.empty())	{ cout<<"empty image"; system("pause"); return 0; }
 	imshow("input",image);
+	Size s = image.size();
+	cout<<s;
 
 	Mat gray;
 	cvtColor(image,gray,CV_RGB2GRAY);
 
 	const int MEDIAN_BLUR_FILTER_SIZE = 7;
 	medianBlur(gray, gray, MEDIAN_BLUR_FILTER_SIZE);
+	//imshow("median blur", gray);
 
 	Mat edge;
 	const int LAPLACIAN_FILTER_SIZE = 5;
 	Laplacian(gray, edge, gray.depth(), LAPLACIAN_FILTER_SIZE);
+	//imshow("laplacian",edge);
 
 	Mat mask;
 	const int EDGE_THRESHOLD = 80;
 	threshold(edge, mask, EDGE_THRESHOLD, 255, THRESH_BINARY_INV);
-
+	imshow("mask",mask);
 	Size size = image.size();
 	Size smallSize;
 	smallSize.width = size.width/2;
